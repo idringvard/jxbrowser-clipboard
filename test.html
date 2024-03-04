@@ -2,7 +2,7 @@
 <head>
 	<title>Clipboard test</title>
 </head>
-<body>
+<body onload="navigator.permissions.query({name: 'clipboard-write'}).then(result => console.log(result))">
 	<button onclick="navigator.clipboard.writeText('Hello, clipboard')">Set clipboard</button>
 </body>
 </html>
