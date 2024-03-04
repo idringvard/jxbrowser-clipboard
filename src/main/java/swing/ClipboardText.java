@@ -20,6 +20,7 @@
 
 package swing;
 
+import com.google.common.base.Charsets;
 import com.teamdev.jxbrowser.browser.Browser;
 import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
@@ -30,6 +31,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Scanner;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -62,7 +69,18 @@ public final class ClipboardText {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+        browser.navigation().loadUrl("file://"+ new File("test.html").getAbsolutePath());
+    }
 
-        browser.navigation().loadUrl("file://D:/test.html");
+    private static String load(String resourceFile) {
+        URL url = ClipboardText.class.getResource(resourceFile);
+        try (Scanner scanner = new Scanner(url.openStream(),
+                Charsets.UTF_8.toString())) {
+            scanner.useDelimiter("\\A");
+            return scanner.hasNext() ? scanner.next() : "";
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to load resource " +
+                    resourceFile, e);
+        }
     }
 }
